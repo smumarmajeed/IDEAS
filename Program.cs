@@ -1,59 +1,65 @@
-﻿using Microsoft.VisualBasic.FileIO;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-
-namespace ConsoleApp3
+namespace pattern
 {
-    internal class Program
+    class MainClass
     {
-        static string filePath = "test.csv";
+       
 
-        static string filePath2 = "today.csv";
         static void Main(string[] args)
         {
+            string filePath = "test.csv";
+
+            string filePath2 = "today.csv";
 
             while (true)
             {
-                Console.WriteLine("1. Add record");
-                Console.WriteLine("2. View all records");
-                Console.WriteLine("3. Update record");
-                Console.WriteLine("4. Delete record");
-                Console.WriteLine("5. Create Attandence");
-                Console.WriteLine("6. View Attandence");
-                Console.WriteLine("7. Exit");
-                Console.WriteLine("8. Analytics");
+                Console.WriteLine("_____________________");
+                Console.WriteLine("------\\IDEAS//------");
+                Console.WriteLine("_____________________");
+                Console.WriteLine("1) Add record        |");
+                Console.WriteLine("2) View all records  |");
+                Console.WriteLine("3) Update record     |");
+                Console.WriteLine("4) Delete record     |");
+                Console.WriteLine("5) Create Attandence |");
+                Console.WriteLine("6) View Attandence   |");
+                Console.WriteLine("7) Analytics         |");
+                Console.WriteLine("8) Exit              |");
+                Console.WriteLine("_____________________");
                 Console.Write("Enter your choice: ");
+
                 string choice = Console.ReadLine();
 
                 switch (choice)
                 {
                     case "1":
-                        AddRecord();
+                        AddRecord(filePath);
                         break;
                     case "2":
-                        ViewAllRecords();
+                        ViewAllRecords(filePath);
                         break;
                     case "3":
-                        UpdateRecord();
+                        UpdateRecord(filePath);
                         break;
                     case "4":
-                        DeleteRecord();
+                        DeleteRecord(filePath);
                         break;
                     case "5":
                         CreateAttendance();
                         break;
                     case "6":
-                        ViewAttendance();
+                        ViewAttendance(filePath2);
                         break;
                     case "7":
-                        Environment.Exit(0);
+                        Analytics();
                         break;
                     case "8":
-                        Analytics();
+                        Environment.Exit(0);
                         break;
                     default:
                         Console.WriteLine("Invalid choice.");
@@ -62,8 +68,9 @@ namespace ConsoleApp3
             }
         }
 
-        static void AddRecord()
+        static void AddRecord(string filePath)
         {
+            Console.WriteLine("________________________________________");
             Console.WriteLine("Enter record (Format: id,name,gender): ");
             string record = Console.ReadLine();
 
@@ -72,6 +79,7 @@ namespace ConsoleApp3
                 using (StreamWriter writer = File.AppendText(filePath))
                 {
                     writer.WriteLine(record);
+                    Console.WriteLine("__________________________");
                     Console.WriteLine("Record added successfully.");
                 }
             }
@@ -81,15 +89,18 @@ namespace ConsoleApp3
             }
         }
 
-        static void ViewAllRecords()
+        static void ViewAllRecords(string filePath)
         {
             try
             {
                 List<string> records = File.ReadAllLines(filePath).ToList();
-                Console.WriteLine("Records:");
+                Console.WriteLine("------------------------------");
+                Console.WriteLine("Records:                     |");
+                Console.WriteLine("------------------------------");
                 foreach (string record in records)
                 {
-                    Console.WriteLine(record);
+                    Console.WriteLine($"{record,4}");
+                    Console.WriteLine("------------------------------");
                 }
             }
             catch (Exception ex)
@@ -98,9 +109,9 @@ namespace ConsoleApp3
             }
         }
 
-        static void UpdateRecord()
+        static void UpdateRecord(string filePath)
         {
-            Console.WriteLine("Enter index of record to update (0-based): ");
+            Console.WriteLine("Enter index of record to update: ");
             int index = int.Parse(Console.ReadLine());
 
             try
@@ -108,11 +119,13 @@ namespace ConsoleApp3
                 List<string> records = File.ReadAllLines(filePath).ToList();
                 if (index >= 0 && index < records.Count)
                 {
+                    Console.WriteLine("________________________________________");
                     Console.WriteLine("Enter new record (Format: id,name,gender): ");
                     string newRecord = Console.ReadLine();
                     records[index] = newRecord;
 
                     File.WriteAllLines(filePath, records);
+                    Console.WriteLine("___________________________");
                     Console.WriteLine("Record updated successfully.");
                 }
                 else
@@ -126,7 +139,7 @@ namespace ConsoleApp3
             }
         }
 
-        static void DeleteRecord()
+        static void DeleteRecord(string filePath)
         {
             Console.WriteLine("Enter index of record to delete (0-based): ");
             int index = int.Parse(Console.ReadLine());
@@ -139,6 +152,7 @@ namespace ConsoleApp3
                     records.RemoveAt(index);
 
                     File.WriteAllLines(filePath, records);
+                    Console.WriteLine("___________________________");
                     Console.WriteLine("Record deleted successfully.");
                 }
                 else
@@ -154,7 +168,9 @@ namespace ConsoleApp3
 
         static void CreateAttendance()
         {
-            Console.WriteLine("Student Attendance Time");
+            Console.WriteLine("--------------------------");
+            Console.WriteLine("Student Attendance Time  |");
+            Console.WriteLine("--------------------------");
             try
             {
                 // Read lines from CSV file
@@ -166,9 +182,10 @@ namespace ConsoleApp3
                 {
                     if (i == 0)
                     {
-                        updatedData = lines[i] +",attendence";
+                        updatedData = lines[i] + ",attendence";
 
-                    } else
+                    }
+                    else
                     {
                         // Display the current line to the user
                         Console.WriteLine($"Student Info {i + 1}: {lines[i]}");
@@ -178,7 +195,7 @@ namespace ConsoleApp3
                         string attendence = Console.ReadLine();
                         updatedData = lines[i] + "," + attendence;
                     }
-                   
+
 
                     // Update the data in the array
                     lines[i] = updatedData;
@@ -186,7 +203,7 @@ namespace ConsoleApp3
 
                 // Write the updated data back to the CSV file
                 File.WriteAllLines("today.csv", lines);
-
+                Console.WriteLine("-----------------------------");
                 Console.WriteLine("CSV file updated successfully.");
             }
             catch (Exception ex)
@@ -211,15 +228,19 @@ namespace ConsoleApp3
             //}
         }
 
-        static void ViewAttendance()
+        static void ViewAttendance(string filePath2)
         {
             try
             {
                 List<string> records = File.ReadAllLines(filePath2).ToList();
-                Console.WriteLine("Records:");
+                Console.WriteLine("--------------------------");
+                Console.WriteLine("Records:                 |");
+                Console.WriteLine("--------------------------");
                 foreach (string record in records)
                 {
+                    Console.WriteLine("--------------------------");
                     Console.WriteLine(record);
+                    Console.WriteLine("--------------------------");
                 }
             }
             catch (Exception ex)
@@ -262,7 +283,8 @@ namespace ConsoleApp3
                 if (column1[i] == "Male")
                 {
                     male += 1;
-                } else
+                }
+                else
                 {
                     female += 1;
                 }
@@ -280,7 +302,10 @@ namespace ConsoleApp3
                     present += 1;
                 }
             }
-            Console.WriteLine("Male {0} Female {1}", male, female);
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Analytics Report For IDEAS            |");
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Male   {0} Female  {1}", male, female);
             Console.WriteLine("Absent {0} Present {1}", absent, present);
         }
 
